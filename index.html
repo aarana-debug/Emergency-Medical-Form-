@@ -282,6 +282,47 @@
   .footer-links { margin: 8px 0 0; }
   .footer-links a { color: #ff8b98; text-decoration: none; margin: 0 10px; font-weight: 600; }
   .footer-links a:hover { text-decoration: underline; }
+
+  /* ---------- Mobile optimizations ---------- */
+  html { -webkit-text-size-adjust: 100%; }
+  body { overflow-x: clip; }                /* guard against horizontal scroll without breaking sticky header */
+  img, svg, canvas { max-width: 100%; }
+
+  /* Comfortable tap targets everywhere */
+  .btn, nav.links a, .amount-btn, .footer-links a { min-height: 44px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; }
+
+  @media (max-width: 760px){
+    .topbar { font-size: .72rem; padding: 8px 12px; letter-spacing: .02em; }
+
+    /* Compact sticky header */
+    .nav-inner { padding: 11px 0; gap: 10px; }
+    .brand { gap: 9px; }
+    .brand .emf { padding: 5px 9px; font-size: .86rem; }
+    .brand .name { font-size: .9rem; line-height: 1.1; }
+    .brand .name small { display: none; }   /* drop the subtitle on small screens */
+    header.nav .btn { padding: 10px 16px; font-size: .88rem; }
+
+    /* Tighter vertical rhythm */
+    section { padding: 52px 0; }
+    .hero { padding: 40px 0 26px; }
+    .section-head { margin-bottom: 34px; }
+    .hero-cta .btn { flex: 1 1 auto; text-align: center; }
+
+    /* Divider waves shorter (also handled at 700px) */
+    .divider svg { height: 46px; }
+
+    /* Sponsor / note spacing */
+    .sponsor-stack .ambulance { margin-bottom: 26px; }
+  }
+
+  @media (max-width: 420px){
+    .brand .name { display: none; }          /* logo badge + CTA only on very narrow phones */
+    .hero-cta { flex-direction: column; }
+    .hero-cta .btn { width: 100%; }
+    .amounts { justify-content: space-between; }
+    .amount-btn { flex: 1 1 40%; text-align: center; }
+  }
 </style>
 </head>
 <body>
