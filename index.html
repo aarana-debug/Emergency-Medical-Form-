@@ -102,9 +102,26 @@
   @media (max-width: 760px){ nav.links { display: none; } }
 
   /* Hero */
-  .hero { padding: 64px 0 40px; background:
+  .hero { position: relative; padding: 64px 0 64px; background:
       radial-gradient(1200px 400px at 80% -10%, #fde7ea 0%, transparent 60%),
       linear-gradient(#fff, #fff); }
+
+  /* Red down-arrow scroll hint */
+  .scroll-hint {
+    position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);
+    width: 46px; height: 46px; border-radius: 50%; border: none;
+    background: var(--red); color: #fff; display: grid; place-items: center;
+    box-shadow: 0 8px 20px rgba(200,16,46,.35); cursor: pointer; z-index: 6;
+    text-decoration: none; animation: hintBounce 1.8s ease-in-out infinite;
+  }
+  .scroll-hint:hover { background: var(--red-dark); }
+  .scroll-hint svg { width: 22px; height: 22px; display: block; }
+  @keyframes hintBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(-50%) translateY(7px); }
+  }
+  @media (prefers-reduced-motion: reduce){ .scroll-hint { animation: none; } }
+  @media (max-width: 760px){ .scroll-hint { width: 40px; height: 40px; } }
   .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
   .eyebrow { color: var(--red); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; margin-bottom: 14px; }
   .hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -.02em; }
@@ -259,7 +276,7 @@
   /* Confirmation */
   .toast {
     position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(140%);
-    background: #0f7a3d; color:#fff; padding: 14px 24px; border-radius: 999px; font-weight:700;
+    background: var(--red); color:#fff; padding: 14px 24px; border-radius: 999px; font-weight:700;
     box-shadow: var(--shadow-lg); transition: transform .35s cubic-bezier(.2,.9,.3,1.2); z-index: 100;
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
@@ -376,6 +393,11 @@
         <div id="emf3d" role="img" aria-label="Floating 3D caduceus medical symbol with the letters E M F above it"></div>
       </div>
     </div>
+    <a href="#how" class="scroll-hint" aria-label="Scroll down to see how it works">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 9l6 6 6-6" />
+      </svg>
+    </a>
   </section>
 
   <div class="divider" style="--from:#ffffff; --to:#edf1f6;" aria-hidden="true">
