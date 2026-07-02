@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Emergency Medical Form — Sponsored by Financial Health</title>
+<meta name="description" content="A free emergency medical form and magnetic refrigerator packet that helps first responders find important information quickly in an emergency. Sponsored by Financial Health." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --red: #c8102e;
+    --red-dark: #9c0c23;
+    --ink: #1a1d21;
+    --muted: #5a626b;
+    --line: #e6e8ec;
+    --bg: #ffffff;
+    --soft: #f6f7f9;
+    --cream: #f7f3e9;
+    --radius: 14px;
+    --shadow: 0 10px 30px rgba(20, 24, 31, 0.08);
+    --shadow-lg: 0 24px 60px rgba(20, 24, 31, 0.14);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  /* Accessibility helpers */
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  .skip-link {
+    position: absolute; left: 12px; top: -60px; z-index: 200;
+    background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 8px;
+    font-weight: 700; text-decoration: none; transition: top .2s ease;
+  }
+  .skip-link:focus { top: 12px; }
+  :focus-visible { outline: 3px solid var(--red); outline-offset: 2px; border-radius: 4px; }
+  .req { color: var(--red); font-weight: 700; }
+  .opt { color: var(--muted); font-weight: 400; font-size: .85em; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { line-height: 1.15; margin: 0 0 .5em; }
+  p { margin: 0 0 1em; }
+  a { color: var(--red); }
+  img { max-width: 100%; display: block; }
+  .wrap { width: min(1120px, 92%); margin: 0 auto; }
+
+  /* Top sponsor bar */
+  .topbar {
+    background: var(--ink);
+    color: #fff;
+    font-size: .82rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 9px 12px;
+    font-weight: 600;
+  }
+  .topbar strong { color: #ff8b98; font-weight: 700; }
+
+  /* Header / nav */
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; }
+  .brand .emf {
+    background: var(--red); color: #fff; font-weight: 800; letter-spacing: .04em;
+    padding: 6px 11px; border-radius: 9px; font-size: .95rem;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .brand .emf .cad { flex: none; }
+  .brand .name { font-size: 1.02rem; }
+  .brand .name small { display:block; font-size:.72rem; color: var(--muted); font-weight:600; letter-spacing:.02em; }
+  nav.links { display: flex; gap: 26px; align-items: center; }
+  nav.links a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: .95rem; }
+  nav.links a:hover { color: var(--red); }
+  .btn {
+    display: inline-block; background: var(--red); color: #fff; text-decoration: none;
+    font-weight: 700; padding: 12px 22px; border-radius: 999px; border: none; cursor: pointer;
+    font-size: .95rem; transition: transform .12s ease, background .2s ease; box-shadow: 0 6px 18px rgba(200,16,46,.28);
+  }
+  .btn:hover { background: var(--red-dark); transform: translateY(-1px); }
+  .btn.ghost { background: #fff; color: var(--red); border: 1.5px solid var(--red); box-shadow: none; }
+  .btn.ghost:hover { background: #fff5f6; }
+  @media (max-width: 760px){ nav.links { display: none; } }
+
+  /* Hero */
+  .hero { padding: 64px 0 40px; background:
+      radial-gradient(1200px 400px at 80% -10%, #fde7ea 0%, transparent 60%),
+      linear-gradient(#fff, #fff); }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+  .eyebrow { color: var(--red); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; margin-bottom: 14px; }
+  .hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -.02em; }
+  .hero .lead { font-size: 1.18rem; color: var(--muted); max-width: 30ch; }
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px; }
+  .badge-free {
+    display:inline-flex; align-items:center; gap:8px; background:#e8f6ee; color:#0f7a3d;
+    font-weight:700; padding:6px 14px; border-radius:999px; font-size:.85rem; margin-bottom:18px;
+  }
+  .badge-free::before{ content:"✓"; font-weight:800; }
+  .hero-img { position: relative; }
+  .hero-img img { border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+  #emf3d {
+    width: 100%; height: 460px; border-radius: var(--radius);
+    background: radial-gradient(60% 60% at 50% 40%, #fde7ea 0%, rgba(253,231,234,0) 70%);
+    cursor: grab;
+  }
+  #emf3d:active { cursor: grabbing; }
+  #emf3d canvas { display: block; }
+  @media (max-width: 900px){ #emf3d { height: 360px; } }
+  @media (max-width: 900px){ .hero-grid { grid-template-columns: 1fr; gap: 30px; } .hero .lead{ max-width:none; } }
+
+  /* Wavy section dividers */
+  .divider { line-height: 0; background: var(--from, #fff); position: relative; }
+  .divider svg { display: block; width: 100%; height: 90px; }
+  .divider .wv-accent { fill: var(--accent, #c8102e); opacity: .07; }
+  .divider .wv-mid { fill: var(--to, #f6f7f9); opacity: .5; }
+  .divider .wv-main { fill: var(--to, #f6f7f9); }
+  @media (max-width: 700px){ .divider svg { height: 56px; } }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ .reveal { opacity: 1 !important; transform: none !important; transition: none; } }
+
+  /* Section shells */
+  section { padding: 72px 0; }
+  .section-head { text-align: center; max-width: 640px; margin: 0 auto 46px; }
+  .section-head .eyebrow { text-align:center; }
+  .section-head h2 { font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 800; letter-spacing: -.02em; }
+  .section-head p { color: var(--muted); font-size: 1.08rem; }
+  .alt { background: var(--soft); }
+
+  /* Distinct per-section backgrounds (hero left untouched) */
+  #how     { background: linear-gradient(180deg, #edf1f6 0%, #e5ebf2 100%); }
+  #product { background: linear-gradient(180deg, #ffffff 0%, #f8fafb 100%); }
+  #donate  { background: linear-gradient(180deg, #fdeef0 0%, #fae3e7 100%); }
+  #form    { background: linear-gradient(180deg, #faf7f2 0%, #f2ece3 100%); }
+
+  /* How it works */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 30px 26px;
+    box-shadow: var(--shadow); position: relative;
+  }
+  .step .num {
+    width: 42px; height: 42px; border-radius: 12px; background: var(--red); color: #fff;
+    display: grid; place-items: center; font-weight: 800; font-size: 1.15rem; margin-bottom: 16px;
+  }
+  .step h3 { font-size: 1.14rem; }
+  .step p { color: var(--muted); margin: 0; }
+  .fridge-note {
+    margin-top: 34px; display: flex; gap: 18px; align-items: center; justify-content: center;
+    background: #fff; border: 1px dashed var(--red); border-radius: var(--radius);
+    padding: 20px 26px; color: var(--ink); font-weight: 600; text-align: center;
+  }
+  .fridge-note span.ico { font-size: 1.6rem; }
+  @media (max-width: 820px){ .steps { grid-template-columns: 1fr; } }
+
+  /* Product showcase */
+  .showcase { display: flex; flex-direction: column; align-items: center; gap: 34px; }
+  .showcase figure { margin: 0; text-align:center; }
+  .showcase .framed {
+    background: var(--soft); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px; box-shadow: var(--shadow); width: 100%;
+  }
+  .showcase .framed.wide { max-width: 860px; }
+  .showcase .framed:not(.wide) { max-width: 440px; }
+  .showcase .framed img { border-radius: 10px; box-shadow: 0 4px 14px rgba(20,24,31,.12); margin: 0 auto; display:block; background:#fff; }
+  .showcase .framed a { display:block; cursor: zoom-in; }
+  .showcase figcaption { color: var(--muted); font-size:.9rem; margin-top: 14px; font-weight:600; }
+  .zoom-hint { color: var(--red); }
+
+  /* Form */
+  .form-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 18px;
+    box-shadow: var(--shadow-lg); padding: 40px; max-width: 860px; margin: 0 auto;
+  }
+  .form-card .free-flag {
+    display:inline-flex; align-items:center; gap:8px; background:var(--red); color:#fff;
+    padding:6px 14px; border-radius:999px; font-weight:700; font-size:.8rem; letter-spacing:.04em; text-transform:uppercase;
+  }
+  fieldset { border: none; padding: 0; margin: 0 0 28px; }
+  legend { font-weight: 800; font-size: 1.1rem; color: var(--red); padding-bottom: 10px; margin-bottom: 16px; border-bottom: 2px solid var(--line); width: 100%; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .field { display: flex; flex-direction: column; margin-bottom: 4px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-weight: 600; font-size: .88rem; margin-bottom: 6px; }
+  input, select, textarea {
+    font: inherit; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px;
+    background: #fdfdfe; color: var(--ink); transition: border .15s ease, box-shadow .15s ease; width:100%;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(200,16,46,.12); }
+  textarea { resize: vertical; min-height: 76px; }
+  .radio-row { display:flex; gap: 20px; align-items:center; padding-top: 6px; }
+  .radio-row label { font-weight: 500; display:flex; align-items:center; gap:7px; margin:0; }
+  .radio-row input { width:auto; }
+  .contact-block { background: var(--soft); border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+  @media (max-width: 640px){ .grid2, .grid3 { grid-template-columns: 1fr; } .form-card { padding: 26px 20px; } }
+
+  /* Donation */
+  .donate-grid { display:grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items:center; }
+  .amounts { display:flex; flex-wrap:wrap; gap: 12px; margin: 20px 0; }
+  .amount-btn {
+    border: 1.5px solid var(--line); background:#fff; border-radius: 12px; padding: 14px 22px;
+    font-weight: 700; cursor: pointer; font-size: 1.05rem; transition: all .15s ease; color: var(--ink);
+  }
+  .amount-btn:hover { border-color: var(--red); color: var(--red); }
+  .amount-btn.active { background: var(--red); color:#fff; border-color: var(--red); box-shadow: 0 6px 18px rgba(200,16,46,.28); }
+  .custom-amount { display:flex; align-items:center; gap:10px; margin-bottom: 18px; }
+  .custom-amount .prefix { font-weight:700; font-size:1.1rem; }
+  .thanks { color: var(--muted); font-style: italic; margin-top: 8px; }
+  @media (max-width: 820px){ .donate-grid { grid-template-columns: 1fr; } }
+
+  /* Sponsor */
+  .sponsor { background: var(--ink); color: #fff; }
+  .sponsor-grid { display:grid; grid-template-columns: .8fr 1.2fr; gap: 46px; align-items:center; }
+  .sponsor h2 { color:#fff; }
+  .sponsor p { color: #c8ccd2; font-size: 1.12rem; }
+  .sponsor .tag { color:#ff8b98; font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.82rem; }
+  .sponsor img { border-radius: var(--radius); box-shadow: var(--shadow-lg); width: 100%; }
+  .sponsor-stack { text-align: center; }
+  .sponsor-stack .ambulance { max-width: 960px; margin: 0 auto 40px; }
+  .sponsor-stack .sponsor-copy { max-width: 640px; margin: 0 auto; }
+  @media (max-width: 820px){ .sponsor-grid { grid-template-columns: 1fr; } }
+
+  /* Note from Financial Health */
+  .note-section { background: var(--cream); }
+  .note-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 48px; align-items: center; }
+  .note-figure { margin: 0; }
+  .note-figure img { border-radius: var(--radius); box-shadow: var(--shadow-lg); max-width: 380px; margin: 0 auto; }
+  .note-section h2 { font-size: clamp(1.7rem, 3.2vw, 2.2rem); letter-spacing: -.02em; }
+  .note-section p { color: #45403a; font-size: 1.06rem; }
+  @media (max-width: 820px){ .note-grid { grid-template-columns: 1fr; gap: 30px; } }
+
+  /* Footer */
+  footer { background: #0f1113; color: #aab0b8; padding: 44px 0; text-align:center; font-size:.92rem; }
+  footer strong { color:#fff; }
+  footer .fbrand { color:#ff8b98; font-weight:700; }
+
+  /* Confirmation */
+  .toast {
+    position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(140%);
+    background: #0f7a3d; color:#fff; padding: 14px 24px; border-radius: 999px; font-weight:700;
+    box-shadow: var(--shadow-lg); transition: transform .35s cubic-bezier(.2,.9,.3,1.2); z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Cookie banner */
+  .cookie {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 120;
+    background: var(--ink); color: #eef0f3; padding: 18px 0;
+    box-shadow: 0 -6px 24px rgba(0,0,0,.25);
+    transform: translateY(120%); transition: transform .4s ease;
+  }
+  .cookie.show { transform: translateY(0); }
+  .cookie-inner { display: flex; align-items: center; gap: 22px; justify-content: space-between; flex-wrap: wrap; }
+  .cookie p { margin: 0; font-size: .95rem; max-width: 70ch; }
+  .cookie a { color: #ff8b98; }
+  .cookie-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .cookie-actions .btn { padding: 10px 20px; }
+  .cookie-actions .btn.ghost { background: transparent; color: #fff; border-color: #4a525c; box-shadow: none; }
+  .cookie-actions .btn.ghost:hover { background: rgba(255,255,255,.08); }
+  .footer-links { margin: 8px 0 0; }
+  .footer-links a { color: #ff8b98; text-decoration: none; margin: 0 10px; font-weight: 600; }
+  .footer-links a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <div class="topbar">Sponsored by <strong>Financial Health</strong> — Protecting What Matters Most</div>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <div class="brand">
+        <span class="emf">
+          <svg class="cad" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="3" r="1.2" fill="currentColor" stroke="none" />
+            <line x1="12" y1="4.2" x2="12" y2="21" />
+            <path d="M12 6.2 C9 4.7 6.5 5.2 5 6.7 C7.5 6.4 9.5 7 12 8.2" />
+            <path d="M12 6.2 C15 4.7 17.5 5.2 19 6.7 C16.5 6.4 14.5 7 12 8.2" />
+            <path d="M12 8.5 C8 9.5 8 11.5 12 12.5 C16 13.5 16 15.5 12 16.5 C8 17.5 8 19.5 12 20.5" />
+            <path d="M12 8.5 C16 9.5 16 11.5 12 12.5 C8 13.5 8 15.5 12 16.5 C16 17.5 16 19.5 12 20.5" />
+          </svg>
+          EMF
+        </span>
+        <span class="name">Emergency Medical Form<small>Sponsored by Financial Health</small></span>
+      </div>
+      <nav class="links" aria-label="Primary">
+        <a href="#how">How It Works</a>
+        <a href="#product">The Packet</a>
+        <a href="#form">Get Your Form</a>
+        <a href="#sponsor">Our Sponsor</a>
+      </nav>
+      <a href="#form" class="btn">Get Yours Free</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="badge-free">100% Free — provided at no cost</span>
+        <div class="eyebrow">Emergency Medical Form</div>
+        <h1 id="hero-title">Help first responders find important information quickly in an emergency.</h1>
+        <p class="lead">A simple medical form and magnetic packet for your refrigerator — one of the first places responders check.</p>
+        <div class="hero-cta">
+          <a href="#form" class="btn">Get Your Free Form</a>
+          <a href="#how" class="btn ghost">See How It Works</a>
+        </div>
+      </div>
+      <div class="hero-img">
+        <div id="emf3d" role="img" aria-label="Floating 3D caduceus medical symbol with the letters E M F above it"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="--from:#ffffff; --to:#edf1f6;" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <path class="wv-accent" d="M0,38 C180,80 360,10 540,28 C720,46 900,-2 1080,20 C1260,42 1350,60 1440,40 L1440,90 L0,90 Z"/>
+      <path class="wv-mid" d="M0,58 C200,88 380,34 560,50 C740,66 920,26 1100,44 C1280,62 1360,74 1440,60 L1440,90 L0,90 Z"/>
+      <path class="wv-main" d="M0,48 C180,90 360,20 540,38 C720,56 900,8 1080,30 C1260,52 1350,70 1440,50 L1440,90 L0,90 Z"/>
+    </svg>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Simple &amp; Fast</div>
+        <h2>How It Works</h2>
+        <p>Three quick steps to make sure your critical information is ready when it matters most.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>Fill out your form</h3>
+          <p>Complete your emergency medical information — conditions, medications, allergies, and emergency contacts.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>Place it in the packet</h3>
+          <p>Slide your completed form into the magnetic emergency packet we provide.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>Put it on your refrigerator</h3>
+          <p>Stick the magnetic packet on your fridge where it's easy to find in an emergency.</p>
+        </div>
+      </div>
+      <div class="fridge-note">
+        <span class="ico">🧲</span>
+        <span>The refrigerator is one of the first places first responders may check during a medical emergency.</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="--from:#e5ebf2; --to:#ffffff;" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <path class="wv-accent" d="M0,38 C180,80 360,10 540,28 C720,46 900,-2 1080,20 C1260,42 1350,60 1440,40 L1440,90 L0,90 Z"/>
+      <path class="wv-mid" d="M0,58 C200,88 380,34 560,50 C740,66 920,26 1100,44 C1280,62 1360,74 1440,60 L1440,90 L0,90 Z"/>
+      <path class="wv-main" d="M0,48 C180,90 360,20 540,38 C720,56 900,8 1080,30 C1260,52 1350,70 1440,50 L1440,90 L0,90 Z"/>
+    </svg>
+  </div>
+
+  <!-- PRODUCT SHOWCASE -->
+  <section id="product">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">The Packet</div>
+        <h2>What You'll Receive</h2>
+        <p>A clear, easy-to-read emergency medical form and a durable magnetic packet — completely free and mailed right to your door.</p>
+      </div>
+      <div class="showcase">
+        <figure class="framed wide">
+          <a href="emergency%20medical%20form.jpg" target="_blank" rel="noopener" aria-label="Open a larger, readable image of the Emergency Medical Form in a new tab">
+            <img src="emergency%20medical%20form.jpg" alt="Front and back of the Emergency Medical Form showing fields for personal and medical information" />
+          </a>
+          <figcaption>Front &amp; back of the Emergency Medical Form &nbsp;·&nbsp; <span class="zoom-hint">tap to enlarge</span></figcaption>
+        </figure>
+        <figure class="framed">
+          <img src="emergency%20medical%20form%20fridge%20tag.jpg" alt="Magnetic emergency packet on the refrigerator" />
+          <figcaption>Magnetic packet — ready for your refrigerator</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="--from:#f8fafb; --to:#fdeef0;" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <path class="wv-accent" d="M0,38 C180,80 360,10 540,28 C720,46 900,-2 1080,20 C1260,42 1350,60 1440,40 L1440,90 L0,90 Z"/>
+      <path class="wv-mid" d="M0,58 C200,88 380,34 560,50 C740,66 920,26 1100,44 C1280,62 1360,74 1440,60 L1440,90 L0,90 Z"/>
+      <path class="wv-main" d="M0,48 C180,90 360,20 540,38 C720,56 900,8 1080,30 C1260,52 1350,70 1440,50 L1440,90 L0,90 Z"/>
+    </svg>
+  </div>
+
+  <!-- DONATION -->
+  <section id="donate" class="alt">
+    <div class="wrap">
+      <div class="donate-grid">
+        <div>
+          <div class="eyebrow">Optional Donation</div>
+          <h2>Help Us Keep This Free</h2>
+          <p>Optional donations help cover product and shipping costs so we can continue providing free emergency medical forms.</p>
+          <p class="thanks">Thank you for your support.</p>
+        </div>
+        <div class="form-card" style="box-shadow:var(--shadow);">
+          <div class="amounts">
+            <button type="button" class="amount-btn">$5</button>
+            <button type="button" class="amount-btn active">$10</button>
+            <button type="button" class="amount-btn">$25</button>
+            <button type="button" class="amount-btn">$50</button>
+          </div>
+          <div class="custom-amount">
+            <span class="prefix">$</span>
+            <input type="number" id="customAmount" placeholder="Other amount" min="1" />
+          </div>
+          <button type="button" class="btn" style="width:100%;" id="donateBtn">Donate $10</button>
+          <p style="text-align:center; color:var(--muted); font-size:.82rem; margin:14px 0 0;">100% optional — your free form and packet are yours regardless.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="--from:#fae3e7; --to:#faf7f2;" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <path class="wv-accent" d="M0,38 C180,80 360,10 540,28 C720,46 900,-2 1080,20 C1260,42 1350,60 1440,40 L1440,90 L0,90 Z"/>
+      <path class="wv-mid" d="M0,58 C200,88 380,34 560,50 C740,66 920,26 1100,44 C1280,62 1360,74 1440,60 L1440,90 L0,90 Z"/>
+      <path class="wv-main" d="M0,48 C180,90 360,20 540,38 C720,56 900,8 1080,30 C1260,52 1350,70 1440,50 L1440,90 L0,90 Z"/>
+    </svg>
+  </div>
+
+  <!-- FORM -->
+  <section id="form">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="free-flag">Free</span>
+        <h2 style="margin-top:16px;">Enter Your Information Below</h2>
+        <p>Your emergency medical form and magnetic packet are provided at no cost — we'll mail them directly to the address you enter below.</p>
+      </div>
+
+      <form class="form-card" id="emfForm" novalidate aria-describedby="formHelp">
+        <p id="formHelp" style="margin-top:0; color:var(--muted);">We only need your name and mailing address to send your free emergency medical form and magnetic packet. Fields marked with an asterisk (<span aria-hidden="true">*</span><span class="sr-only">required</span>) are required.</p>
+
+        <fieldset>
+          <legend>Your Name</legend>
+          <div class="grid2">
+            <div class="field">
+              <label for="first">First Name <span class="req" aria-hidden="true">*</span></label>
+              <input id="first" name="first" autocomplete="given-name" required aria-required="true" />
+            </div>
+            <div class="field">
+              <label for="last">Last Name <span class="req" aria-hidden="true">*</span></label>
+              <input id="last" name="last" autocomplete="family-name" required aria-required="true" />
+            </div>
+            <div class="field full">
+              <label for="phone">Phone Number <span class="opt">(optional)</span></label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(586) 555-0123" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Mailing Address</legend>
+          <div class="field full">
+            <label for="street">Street Address <span class="req" aria-hidden="true">*</span></label>
+            <input id="street" name="street" autocomplete="address-line1" required aria-required="true" />
+          </div>
+          <div class="field full" style="margin-top:16px;">
+            <label for="street2">Apartment, suite, etc. <span class="opt">(optional)</span></label>
+            <input id="street2" name="street2" autocomplete="address-line2" />
+          </div>
+          <div class="grid3" style="margin-top:16px;">
+            <div class="field">
+              <label for="city">City <span class="req" aria-hidden="true">*</span></label>
+              <input id="city" name="city" autocomplete="address-level2" required aria-required="true" />
+            </div>
+            <div class="field">
+              <label for="state">State <span class="req" aria-hidden="true">*</span></label>
+              <input id="state" name="state" autocomplete="address-level1" required aria-required="true" />
+            </div>
+            <div class="field">
+              <label for="zip">ZIP Code <span class="req" aria-hidden="true">*</span></label>
+              <input id="zip" name="zip" autocomplete="postal-code" inputmode="numeric" required aria-required="true" />
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="field" style="flex-direction:row; align-items:flex-start; gap:10px; margin-bottom:20px;">
+          <input type="checkbox" id="consent" name="consent" required aria-required="true" style="width:auto; margin-top:5px;" />
+          <label for="consent" style="font-weight:500;">I agree to the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms of Service</a>, and consent to Financial Health using my address to mail my free packet. <span class="req" aria-hidden="true">*</span></label>
+        </div>
+
+        <button type="submit" class="btn" style="width:100%; padding:16px; font-size:1.05rem;">Submit &amp; Get My Free Packet</button>
+        <p style="text-align:center; color:var(--muted); font-size:.85rem; margin:14px 0 0;">Your information is private and used only to prepare and ship your free emergency medical packet.</p>
+      </form>
+    </div>
+  </section>
+
+  <div class="divider" style="--from:#f2ece3; --to:#f7f3e9;" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <path class="wv-accent" d="M0,38 C180,80 360,10 540,28 C720,46 900,-2 1080,20 C1260,42 1350,60 1440,40 L1440,90 L0,90 Z"/>
+      <path class="wv-mid" d="M0,58 C200,88 380,34 560,50 C740,66 920,26 1100,44 C1280,62 1360,74 1440,60 L1440,90 L0,90 Z"/>
+      <path class="wv-main" d="M0,48 C180,90 360,20 540,38 C720,56 900,8 1080,30 C1260,52 1350,70 1440,50 L1440,90 L0,90 Z"/>
+    </svg>
+  </div>
+
+  <!-- NOTE FROM FINANCIAL HEALTH -->
+  <section id="note" class="note-section" aria-labelledby="note-title">
+    <div class="wrap note-grid">
+      <figure class="note-figure">
+        <img src="financial%20health%20form.png" alt="A personal note from Jeff Schemansky, owner of Financial Health and a Firefighter and Paramedic, explaining how the packet helps families prepare for medical emergencies." />
+      </figure>
+      <div>
+        <div class="eyebrow">A Note From Our Sponsor</div>
+        <h2 id="note-title">This packet helps families prepare.</h2>
+        <p>The Emergency Medical Form was made possible by <strong>Financial Health</strong> — because being ready for an emergency is part of protecting the people you love.</p>
+        <p>Have questions about life insurance, wills &amp; trusts, medical directives, or power of attorney? Reach out for a complimentary Financial Health Checkup.</p>
+        <p style="font-weight:700; margin-bottom:2px;">Jeff Schemansky</p>
+        <p style="color:var(--muted); margin:0 0 18px;">Owner, Financial Health — Firefighter / Paramedic</p>
+        <a href="tel:5863712312" class="btn">Call or Text — (586) 371-2312</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="--from:#f7f3e9; --to:#1a1d21;" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <path class="wv-accent" d="M0,38 C180,80 360,10 540,28 C720,46 900,-2 1080,20 C1260,42 1350,60 1440,40 L1440,90 L0,90 Z"/>
+      <path class="wv-mid" d="M0,58 C200,88 380,34 560,50 C740,66 920,26 1100,44 C1280,62 1360,74 1440,60 L1440,90 L0,90 Z"/>
+      <path class="wv-main" d="M0,48 C180,90 360,20 540,38 C720,56 900,8 1080,30 C1260,52 1350,70 1440,50 L1440,90 L0,90 Z"/>
+    </svg>
+  </div>
+
+  <!-- SPONSOR -->
+  <section id="sponsor" class="sponsor">
+    <div class="wrap sponsor-stack">
+      <figure class="ambulance" style="margin:0;">
+        <img src="animated%20ambulance.png" alt="Illustrated Financial Health branded ambulance with Free Consultation phone number (586) 371-2312" />
+      </figure>
+      <div class="sponsor-copy">
+        <div class="tag">Sponsored by</div>
+        <h2>Financial Health</h2>
+        <p>Helping young families become more financially organized so they can enjoy life more.</p>
+        <p style="color:#8a9098; font-size:.98rem;">Protect. Build. Grow. — Protecting What Matters Most.</p>
+        <a href="tel:5863712312" class="btn" style="margin-top:10px;">Free Consultation — (586) 371-2312</a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p><strong>Emergency Medical Form</strong> &nbsp;•&nbsp; Sponsored by <span class="fbrand">Financial Health</span></p>
+      <p>Helping young families become more financially organized so they can enjoy life more.</p>
+      <nav class="footer-links" aria-label="Legal">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="#" id="cookiePrefs">Cookie Preferences</a>
+      </nav>
+      <p style="opacity:.6; font-size:.82rem;">&copy; <span id="year"></span> Financial Health. This form is provided for personal emergency-preparedness use.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Cookie consent banner -->
+  <div class="cookie" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent" aria-describedby="cookieText">
+    <div class="wrap cookie-inner">
+      <p id="cookieText">We use only essential cookies to remember your cookie choice and keep this site working. We do not use tracking or advertising cookies. See our <a href="privacy.html">Privacy Policy</a> for details.</p>
+      <div class="cookie-actions">
+        <button type="button" class="btn ghost" id="cookieDecline">Decline non-essential</button>
+        <button type="button" class="btn" id="cookieAccept">Accept</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Donation amount selection
+    let selected = 10;
+    const amountBtns = document.querySelectorAll('.amount-btn');
+    const custom = document.getElementById('customAmount');
+    const donateBtn = document.getElementById('donateBtn');
+    function updateDonate(){ donateBtn.textContent = 'Donate $' + (selected || 0); }
+    amountBtns.forEach(btn => btn.addEventListener('click', () => {
+      amountBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selected = parseInt(btn.textContent.replace('$',''), 10);
+      custom.value = '';
+      updateDonate();
+    }));
+    custom.addEventListener('input', () => {
+      amountBtns.forEach(b => b.classList.remove('active'));
+      selected = parseInt(custom.value, 10) || 0;
+      updateDonate();
+    });
+    donateBtn.addEventListener('click', () => {
+      if(!selected){ alert('Please choose or enter a donation amount.'); return; }
+      showToast('💖 Thank you! Donation of $' + selected + ' — you\'re helping keep this free.');
+    });
+
+    // Form submit
+    const toast = document.getElementById('toast');
+    let toastTimer;
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
+    }
+    document.getElementById('emfForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const required = ['first','last','street','city','state','zip'];
+      let firstInvalid = null;
+      for(const id of required){
+        const el = document.getElementById(id);
+        if(!el.value.trim()){ el.setAttribute('aria-invalid','true'); if(!firstInvalid) firstInvalid = el; }
+        else { el.removeAttribute('aria-invalid'); }
+      }
+      const consent = document.getElementById('consent');
+      if(!consent.checked && !firstInvalid) firstInvalid = consent;
+      if(firstInvalid){
+        showToast('Please complete all required fields and accept the terms.');
+        firstInvalid.focus();
+        return;
+      }
+      // Record the submission (stored in this browser via localStorage)
+      const val = (id) => (document.getElementById(id).value || '').trim();
+      const submission = {
+        ts: new Date().toISOString(),
+        first: val('first'), last: val('last'), phone: val('phone'),
+        street: val('street'), street2: val('street2'),
+        city: val('city'), state: val('state'), zip: val('zip')
+      };
+      try {
+        const KEY = 'emf_submissions';
+        const list = JSON.parse(localStorage.getItem(KEY) || '[]');
+        list.push(submission);
+        localStorage.setItem(KEY, JSON.stringify(list));
+      } catch (err) { /* storage unavailable */ }
+
+      const first = document.getElementById('first').value.trim();
+      showToast('✓ Thanks, ' + first + '! Your free packet is on its way.');
+      form.reset();
+    });
+
+    // Cookie consent
+    var CK = 'emf_cookie_consent';
+    var banner = document.getElementById('cookieBanner');
+    function hasChoice(){ try { return localStorage.getItem(CK); } catch(e){ return null; } }
+    function setChoice(v){ try { localStorage.setItem(CK, v); } catch(e){} }
+    function showBanner(){ banner.classList.add('show'); }
+    function hideBanner(){ banner.classList.remove('show'); }
+    if(!hasChoice()){ setTimeout(showBanner, 600); }
+    document.getElementById('cookieAccept').addEventListener('click', function(){ setChoice('accepted'); hideBanner(); });
+    document.getElementById('cookieDecline').addEventListener('click', function(){ setChoice('declined'); hideBanner(); });
+    document.getElementById('cookiePrefs').addEventListener('click', function(e){ e.preventDefault(); showBanner(); });
+
+    // Scroll reveal animations
+    (function(){
+      var sel = '.section-head, .step, .fridge-note, .framed, .form-card, #donate .donate-grid > *, #note .note-grid > *, #sponsor .sponsor-stack > *';
+      var els = Array.prototype.slice.call(document.querySelectorAll(sel));
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      els.forEach(function(el){ el.classList.add('reveal'); });
+      if (reduce || !('IntersectionObserver' in window)) {
+        els.forEach(function(el){ el.classList.add('in'); });
+        return;
+      }
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      els.forEach(function(el){
+        el.style.transitionDelay = (getStagger(el) * 90) + 'ms';
+        io.observe(el);
+      });
+      function getStagger(el){
+        var sibs = Array.prototype.slice.call(el.parentNode.children).filter(function(c){ return c.classList.contains('reveal'); });
+        var i = sibs.indexOf(el);
+        return i > 0 ? Math.min(i, 4) : 0;
+      }
+    })();
+  </script>
+
+  <!-- Three.js floating EMF medical emblem -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+    import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+
+    const container = document.getElementById('emf3d');
+    if (container && window.WebGLRenderingContext) {
+      const scene = new THREE.Scene();
+
+      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+      camera.position.set(0, 0, 11);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
+
+      // Lighting
+      scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+      const key = new THREE.DirectionalLight(0xffffff, 1.6);
+      key.position.set(5, 8, 8);
+      key.castShadow = true;
+      scene.add(key);
+      const rim = new THREE.DirectionalLight(0xff8b98, 0.7);
+      rim.position.set(-6, -3, 4);
+      scene.add(rim);
+
+      // Group that floats
+      const emblem = new THREE.Group();
+      scene.add(emblem);
+
+      // Materials
+      const rodMat = new THREE.MeshStandardMaterial({ color: 0x3a3f47, metalness: 0.9, roughness: 0.28 });
+      const snakeMat = new THREE.MeshStandardMaterial({ color: 0xc8102e, metalness: 0.4, roughness: 0.3 });
+      const wingMat = new THREE.MeshStandardMaterial({ color: 0xf3f4f6, metalness: 0.25, roughness: 0.4 });
+
+      const RH = 5.0; // rod height
+
+      // Central rod
+      const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, RH, 28), rodMat);
+      rod.castShadow = true;
+      emblem.add(rod);
+
+      // Top knob
+      const knob = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), rodMat);
+      knob.position.y = RH / 2 + 0.15;
+      knob.castShadow = true;
+      emblem.add(knob);
+
+      // Twisting snakes (two helixes around the rod)
+      class Helix extends THREE.Curve {
+        constructor(radius, height, turns, phase) { super(); this.r = radius; this.h = height; this.turns = turns; this.phase = phase; }
+        getPoint(t, target = new THREE.Vector3()) {
+          const ang = this.phase + t * this.turns * Math.PI * 2;
+          return target.set(this.r * Math.cos(ang), -this.h / 2 + t * this.h, this.r * Math.sin(ang));
+        }
+      }
+      const snakeH = RH - 0.8, snakeR = 0.55, turns = 2.75;
+      [0, Math.PI].forEach((phase) => {
+        const tube = new THREE.Mesh(
+          new THREE.TubeGeometry(new Helix(snakeR, snakeH, turns, phase), 220, 0.15, 16, false),
+          snakeMat
+        );
+        tube.castShadow = true;
+        emblem.add(tube);
+        // snake head near the top of each helix
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.26, 24, 24), snakeMat);
+        const topAng = phase + turns * Math.PI * 2;
+        head.position.set(snakeR * Math.cos(topAng), snakeH / 2 + 0.15, snakeR * Math.sin(topAng));
+        emblem.add(head);
+      });
+
+      // Wings near the top
+      const wingShape = new THREE.Shape();
+      wingShape.moveTo(0, 0);
+      wingShape.quadraticCurveTo(1.3, 0.55, 2.4, 0.35);
+      wingShape.quadraticCurveTo(1.7, 0.15, 2.1, -0.15);
+      wingShape.quadraticCurveTo(1.5, -0.2, 1.8, -0.55);
+      wingShape.quadraticCurveTo(1.0, -0.4, 1.3, -0.8);
+      wingShape.quadraticCurveTo(0.6, -0.55, 0, 0);
+      const wingGeo = new THREE.ExtrudeGeometry(wingShape, { depth: 0.08, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.03, bevelSegments: 2 });
+      const wingR = new THREE.Mesh(wingGeo, wingMat);
+      wingR.position.set(0.18, RH / 2 - 0.35, 0);
+      wingR.rotation.z = 0.12;
+      wingR.castShadow = true;
+      emblem.add(wingR);
+      const wingL = wingR.clone();
+      wingL.scale.x = -1;
+      wingL.position.x = -0.18;
+      emblem.add(wingL);
+
+      // Scale the whole emblem down
+      emblem.scale.setScalar(0.72);
+
+      // EMF text on top — brand red to match the site
+      const loader = new FontLoader();
+      loader.load('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/fonts/helvetiker_bold.typeface.json', (font) => {
+        const textGeo = new TextGeometry('EMF', {
+          font: font, size: 1.0, height: 0.34,
+          bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.035, bevelSegments: 3
+        });
+        textGeo.center();
+        const textMesh = new THREE.Mesh(
+          textGeo,
+          new THREE.MeshStandardMaterial({ color: 0xc8102e, metalness: 0.35, roughness: 0.3 })
+        );
+        textMesh.position.set(0, RH / 2 + 1.15, 0);
+        textMesh.castShadow = true;
+        emblem.add(textMesh);
+      });
+
+      // Sizing
+      function resize() {
+        const w = container.clientWidth, h = container.clientHeight;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // Drag to rotate (no auto-spin)
+      let dragging = false, px = 0, py = 0;
+      let targetY = -0.35, targetX = 0.08, curY = -0.35, curX = 0.08; // gentle resting angle
+      container.addEventListener('pointerdown', (e) => { dragging = true; px = e.clientX; py = e.clientY; });
+      window.addEventListener('pointerup', () => { dragging = false; });
+      window.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        targetY += (e.clientX - px) * 0.01; px = e.clientX;
+        targetX += (e.clientY - py) * 0.01; py = e.clientY;
+        targetX = Math.max(-0.6, Math.min(0.6, targetX));
+      });
+
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let t = 0;
+      function animate() {
+        requestAnimationFrame(animate);
+        t += 0.016;
+        if (!reduce) emblem.position.y = Math.sin(t * 1.1) * 0.28; // gentle float only
+        curY += (targetY - curY) * 0.08;
+        curX += (targetX - curX) * 0.08;
+        emblem.rotation.y = curY;
+        emblem.rotation.x = curX;
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+  </script>
+</body>
+</html>
