@@ -490,19 +490,10 @@
           <p>Optional donations help cover product and shipping costs so we can continue providing free emergency medical forms.</p>
           <p class="thanks">Thank you for your support.</p>
         </div>
-        <div class="form-card" style="box-shadow:var(--shadow);">
-          <div class="amounts">
-            <button type="button" class="amount-btn">$5</button>
-            <button type="button" class="amount-btn active">$10</button>
-            <button type="button" class="amount-btn">$25</button>
-            <button type="button" class="amount-btn">$50</button>
-          </div>
-          <div class="custom-amount">
-            <span class="prefix">$</span>
-            <input type="number" id="customAmount" placeholder="Other amount" min="1" />
-          </div>
-          <button type="button" class="btn" style="width:100%;" id="donateBtn">Donate $10</button>
-          <p style="text-align:center; color:var(--muted); font-size:.82rem; margin:14px 0 0;">100% optional — your free form and packet are yours regardless.</p>
+        <div class="form-card" style="box-shadow:var(--shadow); text-align:center;">
+          <p style="margin-top:0;">Every contribution helps us mail more free emergency medical forms and magnetic packets to families.</p>
+          <a href="#" id="donateBtn" class="btn" style="width:100%;" target="_blank" rel="noopener">Donate</a>
+          <p style="color:var(--muted); font-size:.82rem; margin:14px 0 0;">100% optional — your free form and packet are yours regardless.</p>
         </div>
       </div>
     </div>
@@ -663,29 +654,6 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Donation amount selection
-    let selected = 10;
-    const amountBtns = document.querySelectorAll('.amount-btn');
-    const custom = document.getElementById('customAmount');
-    const donateBtn = document.getElementById('donateBtn');
-    function updateDonate(){ donateBtn.textContent = 'Donate $' + (selected || 0); }
-    amountBtns.forEach(btn => btn.addEventListener('click', () => {
-      amountBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selected = parseInt(btn.textContent.replace('$',''), 10);
-      custom.value = '';
-      updateDonate();
-    }));
-    custom.addEventListener('input', () => {
-      amountBtns.forEach(b => b.classList.remove('active'));
-      selected = parseInt(custom.value, 10) || 0;
-      updateDonate();
-    });
-    donateBtn.addEventListener('click', () => {
-      if(!selected){ alert('Please choose or enter a donation amount.'); return; }
-      showToast('💖 Thank you! Donation of $' + selected + ' — you\'re helping keep this free.');
-    });
 
     // Form submit
     const toast = document.getElementById('toast');
