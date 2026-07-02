@@ -275,11 +275,12 @@
 
   /* Confirmation */
   .toast {
-    position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(140%);
+    position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(200%);
     background: var(--red); color:#fff; padding: 14px 24px; border-radius: 999px; font-weight:700;
-    box-shadow: var(--shadow-lg); transition: transform .35s cubic-bezier(.2,.9,.3,1.2); z-index: 100;
+    box-shadow: var(--shadow-lg); transition: transform .35s cubic-bezier(.2,.9,.3,1.2), opacity .25s ease;
+    z-index: 100; opacity: 0; visibility: hidden; pointer-events: none;
   }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
 
   /* Cookie banner */
   .cookie {
