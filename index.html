@@ -534,8 +534,9 @@
         <p>Your emergency medical form and magnetic packet are provided at no cost — we'll mail them directly to the address you enter below.</p>
       </div>
 
-      <form class="form-card" id="emfForm" novalidate aria-describedby="formHelp">
+      <form class="form-card" id="emfForm" novalidate aria-describedby="formHelp" action="https://formspree.io/f/xzdlkykq" method="POST">
         <p id="formHelp" style="margin-top:0; color:var(--muted);">We only need your name and mailing address to send your free emergency medical form and magnetic packet. Fields marked with an asterisk (<span aria-hidden="true">*</span><span class="sr-only">required</span>) are required.</p>
+        <input type="hidden" name="_subject" value="New Emergency Medical Form request" />
 
         <fieldset>
           <legend>Your Name</legend>
@@ -714,9 +715,34 @@
         localStorage.setItem(KEY, JSON.stringify(list));
       } catch (err) { /* storage unavailable */ }
 
-      const first = document.getElementById('first').value.trim();
-      showToast('✓ Thanks, ' + first + '! Your free packet is on its way.');
-      form.reset();
+      const first = val('first');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalLabel = submitBtn ? submitBtn.textContent : '';
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+
+      // Send to Formspree (AJAX so we keep the on-page confirmation)
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      })
+      .then((res) => {
+        if (res.ok) {
+          showToast('✓ Thanks, ' + first + '! Your free packet is on its way.');
+          form.reset();
+        } else {
+          return res.json().then((data) => {
+            const msg = (data && data.errors && data.errors.map(e => e.message).join(', ')) || 'Something went wrong. Please try again.';
+            showToast('⚠ ' + msg);
+          });
+        }
+      })
+      .catch(() => {
+        showToast('⚠ Network error — please check your connection and try again.');
+      })
+      .finally(() => {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalLabel; }
+      });
     });
 
     // Cookie consent
