@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Emergency Medical Form — Sponsored by Financial Health</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23d33a2c'/%3E%3Cpath%20d='M26%2012h12v14h14v12H38v14H26V38H12V26h14z'%20fill='%23fff'/%3E%3C/svg%3E" />
 <meta name="description" content="A free emergency medical form and magnetic refrigerator packet that helps first responders find important information quickly in an emergency. Sponsored by Financial Health." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -281,6 +282,33 @@
     z-index: 100; opacity: 0; visibility: hidden; pointer-events: none;
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
+
+  /* Donate modal */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 150; display: flex; align-items: center; justify-content: center;
+    padding: 20px; background: rgba(20,24,31,.55);
+    opacity: 0; visibility: hidden; transition: opacity .3s ease;
+  }
+  .modal-overlay.show { opacity: 1; visibility: visible; }
+  .modal {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-lg);
+    max-width: 440px; width: 100%; padding: 36px 32px; text-align: center; position: relative;
+    transform: translateY(16px) scale(.97); transition: transform .3s cubic-bezier(.2,.9,.3,1.2);
+  }
+  .modal-overlay.show .modal { transform: translateY(0) scale(1); }
+  .modal .eyebrow { justify-content: center; margin-bottom: 8px; }
+  .modal h2 { font-size: 1.6rem; letter-spacing: -.02em; margin: 0 0 10px; }
+  .modal p { color: var(--muted); margin: 0 0 22px; }
+  .modal .btn { width: 100%; }
+  .modal-later {
+    display: inline-block; margin-top: 14px; background: none; border: 0; cursor: pointer;
+    color: var(--muted); font-size: .9rem; text-decoration: underline;
+  }
+  .modal-close {
+    position: absolute; top: 12px; right: 14px; background: none; border: 0; cursor: pointer;
+    font-size: 1.4rem; line-height: 1; color: var(--muted); padding: 4px;
+  }
+  .modal-close:hover { color: var(--ink); }
 
   /* Cookie banner */
   .cookie {
@@ -654,6 +682,18 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <!-- Donate modal (shown right after a successful submission) -->
+  <div class="modal-overlay" id="donateModal" role="dialog" aria-modal="true" aria-labelledby="donateModalTitle" aria-describedby="donateModalText">
+    <div class="modal">
+      <button type="button" class="modal-close" id="donateModalClose" aria-label="Close">&times;</button>
+      <div class="eyebrow">Optional Donation</div>
+      <h2 id="donateModalTitle">Your packet is on its way!</h2>
+      <p id="donateModalText">Donations are 100% optional, but they help us cover product and shipping costs so we can mail free emergency medical forms to more families.</p>
+      <a href="https://buymeacoffee.com/jeffschemansky" class="btn" target="_blank" rel="noopener">Donate Now</a>
+      <button type="button" class="modal-later" id="donateModalLater">No thanks, maybe later</button>
+    </div>
+  </div>
+
   <!-- Cookie consent banner -->
   <div class="cookie" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent" aria-describedby="cookieText">
     <div class="wrap cookie-inner">
@@ -677,6 +717,24 @@
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
     }
+    // Donate modal (opens right after a successful submission)
+    var donateModal = document.getElementById('donateModal');
+    var lastFocused = null;
+    function showDonateModal(){
+      lastFocused = document.activeElement;
+      donateModal.classList.add('show');
+      var closeBtn = document.getElementById('donateModalClose');
+      if (closeBtn) closeBtn.focus();
+    }
+    function hideDonateModal(){
+      donateModal.classList.remove('show');
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    }
+    document.getElementById('donateModalClose').addEventListener('click', hideDonateModal);
+    document.getElementById('donateModalLater').addEventListener('click', hideDonateModal);
+    donateModal.addEventListener('click', function(e){ if (e.target === donateModal) hideDonateModal(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && donateModal.classList.contains('show')) hideDonateModal(); });
+
     document.getElementById('emfForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const form = e.target;
@@ -724,6 +782,7 @@
         if (res.ok) {
           showToast('✓ Thanks, ' + first + '! Your free packet is on its way.');
           form.reset();
+          showDonateModal();
         } else {
           return res.json().then((data) => {
             const msg = (data && data.errors && data.errors.map(e => e.message).join(', ')) || 'Something went wrong. Please try again.';
